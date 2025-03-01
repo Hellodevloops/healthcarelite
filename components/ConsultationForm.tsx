@@ -1,4 +1,3 @@
-// components/PatientConsultView.tsx
 "use client";
 
 import React, { useEffect, useState, useMemo } from "react";
@@ -53,30 +52,44 @@ type Patient = {
 
 export default function PatientConsultView() {
   const [patients, setPatients] = useState<Patient[]>([]);
+  const [lastFetchTime, setLastFetchTime] = useState<string>(new Date().toISOString());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [consultingPatient, setConsultingPatient] = useState<Patient | null>(null);
 
-  // Fetch patients periodically every 30 seconds
+  // Fetch patients periodically every 10 seconds
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        setLoading(true);
-        setError(null);
-        const response = await fetch("/api/patients");
+        // Only fetch patients newer than the last fetch time
+        const response = await fetch(`/api/patients?since=${lastFetchTime}`);
         if (!response.ok) throw new Error("Failed to fetch patients");
-        const data = await response.json();
-        setPatients(data);
+        const newPatients: Patient[] = await response.json();
+        
+        // Update patients list by adding only new records
+        setPatients((prevPatients) => {
+          // Filter out any duplicates based on ID
+          const existingIds = new Set(prevPatients.map(p => p.id));
+          const uniqueNewPatients = newPatients.filter(p => !existingIds.has(p.id));
+          return [...prevPatients, ...uniqueNewPatients];
+        });
+
+        // Update last fetch time
+        setLastFetchTime(new Date().toISOString());
+        
+        // Only set loading to false on initial load
+        if (loading) setLoading(false);
+        setError(null);
       } catch (err) {
         setError(err.message || "Something went wrong");
-      } finally {
-        setLoading(false);
+        if (loading) setLoading(false);
       }
     };
 
+    // Initial fetch
     fetchPatients();
-    const interval = setInterval(fetchPatients, 30000); // Fetch every 30 seconds
+    const interval = setInterval(fetchPatients, 10000); // Fetch every 10 seconds
     return () => clearInterval(interval); // Cleanup on unmount
   }, []);
 

@@ -53,7 +53,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Error creating patient:", error);
     return NextResponse.json(
-      { error: "Failed to create patient", details: error.message },
+      // { error: "Failed to create patient", details: error.message },
       { status: 500 }
     );
   }
@@ -111,7 +111,7 @@ export async function PUT(request: Request) {
   } catch (error) {
     console.error("Error updating patient:", error);
     return NextResponse.json(
-      { error: "Failed to update patient", details: error.message },
+      // { error: "Failed to update patient", details: error.message },
       { status: 500 }
     );
   }
@@ -140,7 +140,7 @@ export async function DELETE(request: Request) {
   } catch (error) {
     console.error("Error deleting patient:", error);
     return NextResponse.json(
-      { error: "Failed to delete patient", details: error.message },
+      // { error: "Failed to delete patient", details: error.message },
       { status: 500 }
     );
   }

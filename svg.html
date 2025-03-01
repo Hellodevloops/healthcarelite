@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devloops Healthcare Logo with Download</title>
+    <style>
+        .container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-family: 'Montserrat', Arial, sans-serif;
+            font-weight: 600;
+            background-color: #008080;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            background-color: #00CED1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <svg id="logoSvg" width="320" height="120" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120">
+            <!-- White background -->
+            <rect width="100%" height="100%" fill="white"/>
+
+            <!-- Gradient definition - Adjusted for healthcare theme -->
+            <defs>
+                <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#008080"/> <!-- Teal - Healthcare-inspired -->
+                    <stop offset="100%" stop-color="#00CED1"/> <!-- Dark Turquoise - Fresh and modern -->
+                </linearGradient>
+            </defs>
+
+            <!-- Main text with healthcare-inspired design -->
+            <text font-family="'Montserrat', Arial, sans-serif" 
+                  font-weight="900" 
+                  font-size="40" 
+                  fill="url(#textGrad)" 
+                  x="160" 
+                  y="60" 
+                  text-anchor="middle" 
+                  letter-spacing="0.5">
+                DEVL<tspan font-size="48" dx="2">∞</tspan><tspan dx="2">PS</tspan>
+            </text>
+
+            <!-- Subtext for "Healthcare" -->
+            <text font-family="'Montserrat', Arial, sans-serif" 
+                  font-weight="600" 
+                  font-size="18" 
+                  fill="#008080" 
+                  x="160" 
+                  y="90" 
+                  text-anchor="middle">
+                HEALTHCARE
+            </text>
+
+            <!-- Subtle healthcare cross symbol -->
+            <g fill="#00CED1" opacity="0.3" transform="translate(142, 38)">
+                <rect x="0" y="0" width="4" height="12"/>
+                <rect x="-4" y="4" width="12" height="4"/>
+            </g>
+        </svg>
+        <br>
+        <button onclick="downloadSVG()">Download SVG</button>
+        <button onclick="downloadPNG()">Download PNG</button>
+    </div>
+
+    <script>
+        function downloadSVG() {
+            const svgElement = document.getElementById('logoSvg');
+            const svgData = new XMLSerializer().serializeToString(svgElement);
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'devloops_healthcare_logo.svg';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        function downloadPNG() {
+            const svgElement = document.getElementById('logoSvg');
+            const svgData = new XMLSerializer().serializeToString(svgElement);
+            const canvas = document.createElement('canvas');
+            canvas.width = 320;
+            canvas.height = 120;
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+
+            img.onload = function() {
+                ctx.drawImage(img, 0, 0);
+                const pngUrl = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.href = pngUrl;
+                link.download = 'devloops_healthcare_logo.png';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            };
+            img.src = url;
+        }
+    </script>
+</body>
+</html>

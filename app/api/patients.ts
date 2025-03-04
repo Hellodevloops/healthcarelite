@@ -20,6 +20,7 @@ export default async function handler(
       res.status(200).json({ message: "Patient created successfully" });
     } catch (error) {
       res.status(500).json({ message: "Error creating patient" });
+      console.log(error);
     }
   } else {
     res.status(405).json({ message: "Method not allowed" });

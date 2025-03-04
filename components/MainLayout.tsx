@@ -4,27 +4,61 @@ import React, { useState } from "react";
 import Sidebar from "./Sidebar";
 import MobileMenu from "./MobileMenu";
 import Header from "./Header";
-import Footer from "./Footer";
-import { Stethoscope, Users, UserPlus, User } from "lucide-react";
+
+import Footer from "./Footer";import { Stethoscope, Users, UserPlus, User, } from "lucide-react";
 
 const navItems = [
-  { 
-    name: "Consultation", 
-    view: "Consultation", 
-    href: "/consultation", 
-    active: true, 
-    icon: Stethoscope 
-  },
-  {
-    name: "Patients",
-    active: false,
-    icon: Users,
-    subItems: [
-      { name: "Create Patient", view: "CreatePatient", icon: UserPlus },
-      { name: "All Patients", view: "AllPatients", icon: User },
-    ],
-  },
-];
+    { 
+      name: "Consultation", 
+      view: "Consultation", 
+      href: "/consultation", 
+      active: true, 
+      icon: Stethoscope 
+    },
+    {
+      name: "Patients",
+      active: false,
+      icon: Users,
+      subItems: [
+        { name: "Create Patient", view: "CreatePatient", href: "/create-patient", icon: UserPlus },
+        { name: "All Patients", view: "AllPatients", href: "/patient-list", icon: User },
+      ],
+    },
+    // {
+    //   name: "Appointments",
+    //   active: false,
+    //   icon: Calendar,
+    //   subItems: [
+    //     { name: "Schedule Appointment", view: "ScheduleAppointment", href: "/schedule-appointment", icon: Calendar },
+    //     { name: "View Appointments", view: "ViewAppointments", href: "/appointment-list", icon: FileText },
+    //   ],
+    // },
+    // {
+    //   name: "Billing",
+    //   active: false,
+    //   icon: DollarSign,
+    //   subItems: [
+    //     { name: "Generate Invoice", view: "GenerateInvoice", href: "/invoice/create", icon: FileText },
+    //     { name: "View Bills", view: "ViewBills", href: "/invoice/list", icon: DollarSign },
+    //   ],
+    // },
+    // {
+    //   name: "Reports",
+    //   active: false,
+    //   icon: FileText,
+    //   subItems: [
+    //     { name: "Daily Consultations", view: "DailyConsultations", href: "/reports/daily-consultations", icon: Stethoscope },
+    //     { name: "Patient Summary", view: "PatientSummary", href: "/reports/patient-summary", icon: Users },
+    //   ],
+    // },
+    // {
+    //   name: "Settings",
+    //   active: false,
+    //   icon: Settings,
+    //   href: "/settings",
+    //   view: "Settings",
+    // },
+  ];
 
 interface MainLayoutProps {
   children: React.ReactNode;

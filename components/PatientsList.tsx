@@ -32,6 +32,14 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Toaster, toast } from "sonner"; // Import sonner
 
 type Patient = {
   id: number;
@@ -47,6 +55,7 @@ type Patient = {
   prescription: string | null;
   paymentMode: string | null;
   createdAt: string;
+  status: "new" | "Consulted" | "Cancelled" | null; // Added status field
 };
 
 type SortConfig = {
@@ -152,10 +161,32 @@ export default function PatientsList() {
       if (selectedPatient?.id === editingPatient.id) {
         setSelectedPatient(updatedPatient);
       }
-      alert("Patient updated successfully!");
+      toast.success("Patient updated successfully!"); // Sonner success toast
     } catch (error) {
       console.error("Error updating patient:", error);
-      alert("Failed to update patient");
+      toast.error("Failed to update patient"); // Sonner error toast
+    }
+  };
+
+  const handleStatusChange = async (patientId: number, newStatus: Patient["status"]) => {
+    try {
+      const response = await fetch(`/api/patients/${patientId}/status`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (!response.ok) throw new Error("Failed to update status");
+      const updatedPatient = await response.json();
+      setPatients((prev) =>
+        prev.map((p) => (p.id === patientId ? { ...p, status: newStatus } : p))
+      );
+      if (selectedPatient?.id === patientId) {
+        setSelectedPatient({ ...selectedPatient, status: newStatus });
+      }
+      toast.success(`Status updated to ${newStatus}`); // Sonner success toast
+    } catch (error) {
+      console.error("Error updating status:", error);
+      toast.error("Failed to update status"); // Sonner error toast
     }
   };
 
@@ -186,10 +217,10 @@ export default function PatientsList() {
       }
       setSelectedIds([]);
       setShowDeleteConfirm(false);
-      alert(`Successfully deleted ${selectedIds.length} patient(s)!`);
+      toast.success(`Successfully deleted ${selectedIds.length} patient(s)!`); // Sonner success toast
     } catch (error) {
       console.error("Error deleting patients:", error);
-      alert("Failed to delete one or more patients");
+      toast.error("Failed to delete one or more patients"); // Sonner error toast
     }
   };
 
@@ -217,6 +248,7 @@ export default function PatientsList() {
 
   return (
     <div className="h-screen w-full flex flex-col bg-gray-50 overflow-hidden">
+      <Toaster /> {/* Add Toaster component for sonner */}
       <div className="flex-1 flex flex-col md:flex-row">
         {/* Table Section */}
         <div className="flex-1 flex flex-col overflow-hidden p-4">
@@ -285,6 +317,7 @@ export default function PatientsList() {
                   <TableHead className="text-sm font-medium text-gray-700">Gender</TableHead>
                   <TableHead className="text-sm font-medium text-gray-700">Visit Date</TableHead>
                   <TableHead className="text-sm font-medium text-gray-700">Total Fees</TableHead>
+                  <TableHead className="text-sm font-medium text-gray-700">Status</TableHead>
                   <TableHead className="text-sm font-medium text-gray-700">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -330,6 +363,23 @@ export default function PatientsList() {
                     </TableCell>
                     <TableCell className="text-sm">
                       {((patient.consultationFees || 0) + (patient.otherFees || 0)).toLocaleString() || "N/A"}
+                    </TableCell>
+                    <TableCell className="text-sm">
+                      <Select
+                        value={patient.status || "Pending"}
+                        onValueChange={(value) =>
+                          handleStatusChange(patient.id, value as Patient["status"])
+                        }
+                      >
+                        <SelectTrigger className="w-[120px] h-8">
+                          <SelectValue placeholder="Select Status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="new">New</SelectItem>
+                          <SelectItem value="Consultated">Consulted</SelectItem>
+                          <SelectItem value="Cancelled">Cancelled</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </TableCell>
                     <TableCell className="text-sm">
                       <div className="flex gap-2">
@@ -423,6 +473,8 @@ export default function PatientsList() {
                         ? new Date(selectedPatient.visitDate).toLocaleDateString()
                         : "N/A"}
                     </span>
+                    <span className="font-medium text-gray-700">Status:</span>
+                    <span>{selectedPatient.status || "Pending"}</span>
                   </div>
                   <div>
                     <span className="font-medium text-gray-700">Address:</span>

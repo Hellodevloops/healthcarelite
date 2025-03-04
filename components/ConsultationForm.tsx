@@ -81,8 +81,9 @@ export default function PatientConsultView() {
         // Only set loading to false on initial load
         if (loading) setLoading(false);
         setError(null);
-      } catch (err) {
-        setError(err.message || "Something went wrong");
+      } catch (error) {
+        setError("Something went wrong");
+        console.log(error)
         if (loading) setLoading(false);
       }
     };

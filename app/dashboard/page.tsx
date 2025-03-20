@@ -10,6 +10,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+
+
 import {
   Table,
   TableBody,
@@ -21,7 +23,7 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export default function DashboardPage() {
-  return (
+  return ( 
     <MainLayout activeView="Dashboard">
       <div className="container mx-auto px-4 py-8 space-y-8">
         {/* Header */}
@@ -73,6 +75,8 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column */}
           <div className="space-y-6 lg:col-span-2">
+
+            
             {/* Recent Appointments */}
             <Card>
               <CardHeader>

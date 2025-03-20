@@ -19,7 +19,7 @@ import {
   Clipboard, 
   Activity, 
   UserCheck, 
-  FlaskConical , 
+  FlaskConical ,  
   PlusSquare, 
   ClipboardList,
   MessageSquare
@@ -63,15 +63,15 @@ const navItems = [
         { name: "Prescriptions", view: "Prescriptions", href: "/prescriptions", icon: Pill },
       ],
     },
-    {
-      name: "Diagnostics",
-      active: false,
-      icon: Activity,
-      subItems: [
-        { name: "Order Tests", view: "OrderTests", href: "/diagnostics/order", icon: FlaskConical  },
-        { name: "Test Results", view: "TestResults", href: "/diagnostics/results", icon: FileText },
-      ],
-    },
+      {
+        name: "Diagnostics",
+        active: false,
+        icon: Activity,
+        subItems: [
+          { name: "Order Tests", view: "OrderTests", href: "/diagnostics/order", icon: FlaskConical  },
+          { name: "Test Results", view: "TestResults", href: "/diagnostics/results", icon: FileText },
+        ],
+      },
     {
       name: "Billing",
       active: false,
@@ -175,6 +175,7 @@ export default function MainLayout({ children, activeView }: MainLayoutProps) {
         setMobileOpen={setMobileOpen}
         onNavClick={handleNavClick}
         setExpandedMenu={setExpandedMenu}
+
       />
       <div className="flex flex-1 flex-col sm:pl-64">
         <Header title={title} />
